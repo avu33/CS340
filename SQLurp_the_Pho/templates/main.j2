@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SQLurp the Pho{% endblock %}</title>
+</head>
+<body>
+
+<nav>
+    <a href="/">Home</a> |
+    <a href="/customers">Customers</a> |
+    <a href="/orders">Orders</a> |
+    <a href="/menu-items">Menu Items</a> |
+    <a href="/sales">Sales</a> |
+    <a href="/order-details">Order Details</a>
+</nav>
+
+<hr>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
