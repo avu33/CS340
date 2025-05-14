@@ -1,0 +1,83 @@
+{% extends "main.j2" %}
+{% block content %}
+
+<h1>Orders</h1>
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>orderID</th>
+      <th>customerID</th>
+      <th>timestamp</th>
+      <th>totalAmount</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td>{{ order.orderID }}</td>
+      <td>{{ order.customerID }}</td>
+      <td>{{ order.timestamp }}</td>
+      <td>{{ order.totalAmount }}</td>
+      <form method="POST" action="/delete-order">
+        <input type="hidden" name="orderID" value="{{ order.orderID }}">
+        <td><button type="submit">Delete</button></td>
+      </form>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Create an Order</h2>
+<form method="POST" action="/create-order">
+  <label for="customerID">Customer:</label>
+  <select name="customerID" id="customerID" required>
+    {% for customer in customers %}
+    <option value="{{ customer.customerID }}">
+      {{ customer.customerID }} - {{ customer.firstName }} {{ customer.lastName }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <label for="timestamp">Timestamp:</label>
+  <input type="datetime-local" name="timestamp" id="timestamp" required>
+
+  <label for="totalAmount">Total Amount ($):</label>
+  <input type="number" name="totalAmount" step="0.01" min="0" required>
+
+  <input type="submit" value="Create Order">
+</form>
+
+<hr>
+
+<h2>Update an Order</h2>
+<form method="POST" action="/update-order">
+  <label for="orderID">Order to Update:</label>
+  <select name="orderID" id="orderID" required>
+    {% for order in orders %}
+    <option value="{{ order.orderID }}">Order #{{ order.orderID }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="customerID">Customer:</label>
+  <select name="customerID" required>
+  
+    {% for customer in customers %}
+    <option value="{{ customer.customerID }}">
+      {{ customer.customerID }} - {{ customer.firstName }} {{ customer.lastName }}
+    </option>
+    {% endfor %}
+  </select>
+
+  <label for="timestamp">New Timestamp:</label>
+  <input type="datetime-local" name="timestamp" required>
+
+  <label for="totalAmount">New Total Amount ($):</label>
+  <input type="number" name="totalAmount" step="0.01" min="0" required>
+
+  <input type="submit" value="Update Order">
+</form>
+
+{% endblock %}

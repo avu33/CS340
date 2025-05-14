@@ -1,0 +1,81 @@
+{% extends "main.j2" %}
+{% block content %}
+
+<h1>Menu Items</h1>
+<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th>menuItemID</th>
+      <th>itemName</th>
+      <th>description</th>
+      <th>price</th>
+      <th>costOfFood</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in menu_items %}
+    <tr>
+      <td>{{ item.menuItemID }}</td>
+      <td>{{ item.itemName }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.costOfFood }}</td>
+      <form method="POST" action="/delete-menu-item">
+        <input type="hidden" name="menuItemID" value="{{ item.menuItemID }}">
+        <td><button type="submit">Delete</button></td>
+      </form>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+
+<h2>Create a Menu Item</h2>
+<form method="POST" action="/create-menu-item">
+  <label>Item Name:</label>
+  <input type="text" name="itemName" required>
+
+  <label>Description:</label>
+  <input type="text" name="description">
+
+  <label>Price:</label>
+  <input type="number" name="price" step="0.01" min="0" required>
+
+  <label>Cost of Food (%):</label>
+  <select name="costOfFood" required>
+  <option value="20%">20%</option>
+  <option value="50%">50%</option>
+  </select>
+
+  <input type="submit" value="Create Menu Item">
+</form>
+
+<hr>
+
+<h2>Update a Menu Item</h2>
+<form method="POST" action="/update-menu-item">
+  <label>Menu Item to Update:</label>
+  <select name="menuItemID" required>
+    {% for item in menu_items %}
+    <option value="{{ item.menuItemID }}">{{ item.itemName }}</option>
+    {% endfor %}
+  </select>
+
+  <label>New Description:</label>
+  <input type="text" name="description">
+
+  <label>New Price:</label>
+  <input type="number" name="price" step="0.01" min="0">
+
+  <label>Cost of Food (%):</label>
+  <select name="costOfFood" required>
+  <option value="20%">20%</option>
+  <option value="50%">50%</option>
+  </select>
+
+  <input type="submit" value="Update Menu Item">
+</form>
+
+{% endblock %}
