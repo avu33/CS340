@@ -3,6 +3,34 @@
 
     <h1>Order Details</h1>
 
+    <h2>Add New Order Detail</h2>
+    <form method="POST" action="/create-order-detail">
+        <label for="orderID">Order:</label>
+        <select name="orderID" required>
+            <option value="" disabled selected>Choose an order</option>
+            {% for order in orders %}
+                <option value="{{ order.orderID }}">{{ order.orderID }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="menuItemID">Menu Item:</label>
+        <select name="menuItemID" required>
+            <option value="" disabled selected>Choose a menu item</option>
+            {% for item in menu_items %}
+                <option value="{{ item.menuItemID }}">{{ item.itemName }} (ID {{ item.menuItemID }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="quantityMenuItem">Quantity:</label>
+        <input type="number" name="quantityMenuItem" min="1" required>
+
+        <button type="submit">Add</button>
+    </form>
+
+    <hr> 
+    
+    <h2>Order Details List</h2>
+
     {% if order_details %}
         <table border="1" cellpadding="5" cellspacing="0">
             <tr>
@@ -40,30 +68,5 @@
     {% else %}
         <p>No order details available.</p>
     {% endif %}
-
-    <h2>Add New Order Detail</h2>
-    <form method="POST" action="/create-order-detail">
-        <label for="orderID">Order:</label>
-        <select name="orderID" required>
-            <option value="" disabled selected>Choose an order</option>
-            {% for order in orders %}
-                <option value="{{ order.orderID }}">{{ order.orderID }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="menuItemID">Menu Item:</label>
-        <select name="menuItemID" required>
-            <option value="" disabled selected>Choose a menu item</option>
-            {% for item in menu_items %}
-                <option value="{{ item.menuItemID }}">{{ item.itemName }} (ID {{ item.menuItemID }})</option>
-            {% endfor %}
-        </select>
-
-        <label for="quantityMenuItem">Quantity:</label>
-        <input type="number" name="quantityMenuItem" min="1" required>
-
-        <button type="submit">Add</button>
-    </form>
-
 
 {% endblock %}
