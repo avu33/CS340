@@ -2,44 +2,7 @@
 {% block content %}
 
 <h1>Customers</h1>
-<table border="1" cellpadding="5" cellspacing="0">
-{# READ table #}
-  <thead>
-    <tr>
-      <th>customerID</th>
-      <th>firstName</th>
-      <th>lastName</th>
-      <th>email</th>
-      <th>marketingOptOut</th>
-      <th>customerType</th>
-      <th>visitCount</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for customer in customers %}
-    <tr>
-      <td>{{ customer.customerID }}</td>
-      <td>{{ customer.firstName }}</td>
-      <td>{{ customer.lastName }}</td>
-      <td>{{ customer.email | default('', true) }}</td>
-      <td>{{ customer.marketingOptOut }}</td>
-      <td>{{ customer.customerType }}</td>
-      <td>{{ customer.visitCount }}</td>
 
-      {# DELETE form #}
-      <form method="POST" action="/delete-customer">
-        <input type="hidden" name="customerID" value="{{ customer.customerID }}">
-        <td>
-          <button type="submit">Delete</button>
-        </td>
-      </form>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<hr>
 
 {# CREATE form #}
 <h2>Create a Customer</h2>
@@ -52,7 +15,7 @@
 
   <label for="email">Email: </label>
   <input type="email" name="email" id="email">
-
+  <br>
   <label for="marketingOptOut">Marketing Opt Out:</label>
   <select name="marketingOptOut" id="marketingOptOut">
     <option value="0">No</option>
@@ -71,13 +34,11 @@
 
   <input type="submit" value="Create Customer">
 </form>
-
-<hr>
+ 
+<hr> 
 
 {# UPDATE form #}
 <h2>Update a Customer</h2>
-<h3>test line</h3>
-<h3>test line</h3>
 
 
 <form class="cuForm" method="POST" action="/update-customer">
@@ -111,5 +72,50 @@
 
   <input type="submit" value="Update Customer">
 </form>
+
+<hr>
+
+<h2>Customer List</h2>
+<table border="1" cellpadding="5" cellspacing="0">
+{# READ table #}
+  <thead>
+    <tr>
+      <th>Customer ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Marketing Opt-out</th>
+      <th>Customer Type</th>
+      <th>Visit Count</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customers %}
+    <tr>
+      <td>{{ customer.customerID }}</td>
+      <td>{{ customer.firstName }}</td>
+      <td>{{ customer.lastName }}</td>
+      <td>{{ customer.email | default('', true) }}</td>
+      <td>{{ customer.marketingOptOut }}</td>
+      <td>{{ customer.customerType }}</td>
+      <td>{{ customer.visitCount }}</td>
+
+      {# DELETE form #}
+      <form method="POST" action="/delete-customer">
+        <input type="hidden" name="customerID" value="{{ customer.customerID }}">
+        <td>
+          <button type="submit">Delete</button>
+        </td>
+      </form>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+
+
+<hr>
 
 {% endblock %}
