@@ -2,7 +2,7 @@
 # ########## SETUP
 PORT = 1027
 from flask import Flask, render_template, request, redirect
-import database.db_connector as db  # Adjust this if your path is different
+import database.db_connector as db  
 
 PORT = 1027
 app = Flask(__name__)
@@ -370,22 +370,32 @@ def menu_items():
 #         if "dbConnection" in locals() and dbConnection:
 #             dbConnection.close()
 
-# # DELETE: Remove a menu item
-# @app.route("/delete-menu-item", methods=["POST"])
-# def delete_menu_item():
-#     try:
-#         dbConnection = db.connectDB()
-#         item_id = request.form.get("menuItemID")
-#         query = "DELETE FROM MenuItems WHERE menuItemID = %s;"
-#         db.query(dbConnection, query, (item_id,))
-#         dbConnection.commit()
-#         return redirect("/menu-items")
-#     except Exception as e:
-#         print(f"Error deleting menu item: {e}")
-#         return "Failed to delete menu item", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
+# DELETE menu item
+@app.route("/delete-menu-item", methods=["POST"])
+def delete_menu_item():
+    print("Route /delete-menu-item was hit!")  # DEBUG LINE
+
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        item_id = request.form["menuItemID"]
+        item_name = request.form["itemName"]
+
+        query = "CALL sp_DeleteMenuItem(%s)";
+        cursor.execute(query, (item_id,))
+        dbConnection.commit()
+        print(f"Deleted menu item: {item_name} (ID: {item_id})")
+
+        return redirect("/menu-items")
+    
+    except Exception as e:
+        print(f"Error deleting menu item: {e}")
+        return "Failed to delete menu item", 500
+    
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
 
 # READ: Sales Page
 @app.route("/sales", methods=["GET"])
@@ -404,171 +414,29 @@ def sales():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-# # CREATE: Add a sale
-# @app.route("/create-sale", methods=["POST"])
-# def create_sale():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-
-#         menu_item_id = int(data.get("menuItemID"))
-#         quantity = int(data.get("quantitySold"))
-
-#         # Fetch price and costOfFood % from MenuItems
-#         query = "SELECT price, costOfFood FROM MenuItems WHERE menuItemID = %s;"
-#         result = db.query(dbConnection, query, (menu_item_id,)).fetchone()
-#         price = float(result["price"])
-#         cost_pct = 0.2 if result["costOfFood"] == "20%" else 0.5
-
-#         # Calculate totals
-#         total_revenue = round(price * quantity, 2)
-#         total_cost = round(total_revenue * cost_pct, 2)
-#         total_profit = round(total_revenue - total_cost, 2)
-
-#         # Insert sale
-#         insert_query = """
-#             INSERT INTO Sales (menuItemID, totalRevenue, totalCost, totalProfit, quantitySold)
-#             VALUES (%s, %s, %s, %s, %s);
-#         """
-#         values = (menu_item_id, total_revenue, total_cost, total_profit, quantity)
-#         db.query(dbConnection, insert_query, values)
-#         dbConnection.commit()
-
-#         return redirect("/sales")
-#     except Exception as e:
-#         print(f"Error creating sale: {e}")
-#         return "Failed to create sale", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # UPDATE: Modify a sale
-# @app.route("/update-sale", methods=["POST"])
-# def update_sale():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-
-#         sale_id = int(data.get("saleID"))
-#         new_quantity = int(data.get("quantitySold"))
-
-#         # Get menuItemID from sale
-#         sale_query = "SELECT menuItemID FROM Sales WHERE saleID = %s;"
-#         menu_item_id = db.query(dbConnection, sale_query, (sale_id,)).fetchone()["menuItemID"]
-
-#         # Fetch price and cost from MenuItems
-#         item_query = "SELECT price, costOfFood FROM MenuItems WHERE menuItemID = %s;"
-#         item = db.query(dbConnection, item_query, (menu_item_id,)).fetchone()
-#         price = float(item["price"])
-#         cost_pct = 0.2 if item["costOfFood"] == "20%" else 0.5
-
-#         # Recalculate
-#         total_revenue = round(price * new_quantity, 2)
-#         total_cost = round(total_revenue * cost_pct, 2)
-#         total_profit = round(total_revenue - total_cost, 2)
-
-#         update_query = """
-#             UPDATE Sales
-#             SET quantitySold = %s,
-#                 totalRevenue = %s,
-#                 totalCost = %s,
-#                 totalProfit = %s
-#             WHERE saleID = %s;
-#         """
-#         values = (new_quantity, total_revenue, total_cost, total_profit, sale_id)
-#         db.query(dbConnection, update_query, values)
-#         dbConnection.commit()
-
-#         return redirect("/sales")
-#     except Exception as e:
-#         print(f"Error updating sale: {e}")
-#         return "Failed to update sale", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # DELETE: Remove a sale
-# @app.route("/delete-sale", methods=["POST"])
-# def delete_sale():
-#     try:
-#         dbConnection = db.connectDB()
-#         sale_id = request.form.get("saleID")
-#         query = "DELETE FROM Sales WHERE saleID = %s;"
-#         db.query(dbConnection, query, (sale_id,))
-#         dbConnection.commit()
-#         return redirect("/sales")
-#     except Exception as e:
-#         print(f"Error deleting sale: {e}")
-#         return "Failed to delete sale", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# RESET ALL TABLES
-@app.route("/reset-all", methods=["POST"])
-def reset_all():
+# RESET db
+@app.route("/reset-db", methods=["POST"])
+def reset_db():
     try:
         dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
 
-        # Delete from child-to-parent order
-        db.query(dbConnection, "DELETE FROM OrderDetails;")
-        db.query(dbConnection, "DELETE FROM Sales;")
-        db.query(dbConnection, "DELETE FROM Orders;")
-        db.query(dbConnection, "DELETE FROM MenuItems;")
-        db.query(dbConnection, "DELETE FROM Customers;")
-
-        # Insert default data
-        db.query(dbConnection, """
-            INSERT INTO Customers (customerID, firstName, lastName, email, marketingOptOut, customerType, visitCount)
-            VALUES 
-                (1, 'Jane', 'Doe', 'jdoe@hello.com', 1, 'New', 1),
-                (2, 'Mike', 'Roberts', NULL, 0, 'Returning', 5),
-                (3, 'Emily', 'King', 'eking@hello.com', 1, 'Returning', 2);
-        """)
-
-        db.query(dbConnection, """
-            INSERT INTO MenuItems (menuItemID, itemName, description, price, costOfFood)
-            VALUES 
-                (1, 'Fried Egg Rolls', 'Crispy fried veggie egg rolls', 7.99, '20%%'),
-                (2, 'Vietnamese Iced Coffee', 'Traditional phin drip coffee with condensed milk', 5.00, '20%%'),
-                (3, 'Combo Pho', 'Traditional beef bone noodle soup with 4 meats', 16.99, '50%%'),
-                (4, 'Tofu Vermicelli Bowl', 'Lemongrass grilled tofu with herbs and noodles', 14.99, '50%%');
-        """)
-
-        db.query(dbConnection, """
-            INSERT INTO Orders (orderID, customerID, timestamp, totalAmount)
-            VALUES 
-                (1, 1, '2025-05-01 12:00:00', 16.99),
-                (2, 2, '2025-05-02 13:30:00', 5.00),
-                (3, 3, '2025-05-03 14:45:00', 34.98);
-        """)
-
-        db.query(dbConnection, """
-            INSERT INTO OrderDetails (orderID, menuItemID, quantityMenuItem)
-            VALUES 
-                (2, 4, 2),
-                (1, 3, 1),
-                (3, 4, 1),
-                (3, 2, 1);
-        """)
-
-        db.query(dbConnection, """
-            INSERT INTO Sales (saleID, menuItemID, totalRevenue, totalCost, totalProfit, quantitySold)
-            VALUES 
-                (1, 2, 1090.00, 218.00, 872.00, 218),
-                (2, 3, 3398.00, 1699.00, 1699.00, 200),
-                (3, 4, 2268.00, 453.60, 1814.40, 189);
-        """)
-
+        cursor.callproc("sp_reset_PHOdatabase")
         dbConnection.commit()
-        return redirect("/")  # ✅ Redirect to home page
+        print("Database reset successfully.")
+
+        return redirect("/")
+    
     except Exception as e:
-        print(f"Error resetting all tables: {e}")
-        return "Failed to reset all tables", 500
+        print(f"Error resetting database: {e}")
+        return "Failed to reset database", 500
+    
     finally:
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
 # LISTENER
 if __name__ == "__main__":
+    import os
+    os.environ['FLASK_ENV'] = 'development'
     app.run(host="0.0.0.0", port=1027, debug=True)
