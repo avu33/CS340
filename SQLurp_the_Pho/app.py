@@ -56,6 +56,8 @@ def orders():
 # READ order details
 @app.route('/order-details', methods=["GET", "POST"])
 def order_details():
+    results, orders, menu_items = [], [], []
+
     try:
         dbConnection = db.connectDB()
         select_query = """
@@ -72,7 +74,6 @@ def order_details():
 
     except Exception as e:
         print("Error fetching order details:", e)
-        results, orders, menu_items = [], [], []
     finally:
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
