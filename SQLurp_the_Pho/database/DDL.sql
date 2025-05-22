@@ -86,7 +86,7 @@ BEGIN
     PRIMARY KEY (`saleID`),
     FOREIGN KEY (`menuItemID`)
     REFERENCES `MenuItems` (`menuItemID`)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
     );
 

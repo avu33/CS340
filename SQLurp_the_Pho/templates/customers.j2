@@ -3,78 +3,6 @@
 
 <h1>Customers</h1>
 
-
-{# CREATE form #}
-<h2>Create a Customer</h2>
-<form class="cuForm" method="POST" action="/create-customer">
-  <label for="firstName">First Name: </label>
-  <input type="text" name="firstName" id="firstName" required>
-
-  <label for="lastName">Last Name: </label>
-  <input type="text" name="lastName" id="lastName" required>
-
-  <label for="email">Email: </label>
-  <input type="email" name="email" id="email">
-  <br>
-  <label for="marketingOptOut">Marketing Opt Out:</label>
-  <select name="marketingOptOut" id="marketingOptOut">
-    <option value="0">No</option>
-    <option value="1">Yes</option>
-  </select>
-
-  <label for="customerType">Customer Type:</label>
-  <select name="customerType" id="customerType" required>
-    <option value="" disabled selected>Select type</option>
-    <option value="New">New</option>
-    <option value="Returning">Returning</option>
-  </select>
-
-  <label for="visitCount">Visit Count: </label>
-  <input type="number" name="visitCount" id="visitCount" min="0" value="1">
-
-  <input type="submit" value="Create Customer">
-</form>
- 
-<hr> 
-
-{# UPDATE form #}
-<h2>Update a Customer</h2>
-
-
-<form class="cuForm" method="POST" action="/update-customer">
-  <label for="customerID">Customer to Update:</label>
-  <select name="customerID" id="customerID" required>
-    <option value="" disabled selected>Select a Customer</option>
-    {% for customer in customers %}
-    <option value="{{ customer.customerID }}">
-      {{ customer.customerID }} - {{ customer.firstName }} {{ customer.lastName }}
-    </option>
-    {% endfor %}
-  </select>
-
-  <label for="email">Email: </label>
-  <input type="email" name="email" id=" email">
-
-  <label for="marketingOptOut">Marketing Opt Out:</label>
-  <select name="marketingOptOut" id="marketingOptOut">
-    <option value="0">No</option>
-    <option value="1">Yes</option>
-  </select>
-
-  <label for="customerType">Customer Type:</label>
-  <select name="customerType" id="customerType">
-    <option value="New">New</option>
-    <option value="Returning">Returning</option>
-  </select>
-
-  <label for="visitCount">Visit Count: </label>
-  <input type="number" name="visitCount" id="visitCount" min="0">
-
-  <input type="submit" value="Update Customer">
-</form>
-
-<hr>
-
 <h2>Customer List</h2>
 <table border="1" cellpadding="5" cellspacing="0">
 {# READ table #}
@@ -87,7 +15,6 @@
       <th>Marketing Opt-out</th>
       <th>Customer Type</th>
       <th>Visit Count</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -100,14 +27,6 @@
       <td>{{ customer.marketingOptOut }}</td>
       <td>{{ customer.customerType }}</td>
       <td>{{ customer.visitCount }}</td>
-
-      {# DELETE form #}
-      <form method="POST" action="/delete-customer">
-        <input type="hidden" name="customerID" value="{{ customer.customerID }}">
-        <td>
-          <button type="submit">Delete</button>
-        </td>
-      </form>
     </tr>
     {% endfor %}
   </tbody>

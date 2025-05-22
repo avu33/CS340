@@ -7,7 +7,7 @@ import database.db_connector as db
 PORT = 1027
 app = Flask(__name__)
 
-# Home page route
+# home page
 @app.route("/", methods=["GET"])
 def home():
     try:
@@ -16,7 +16,8 @@ def home():
         print(f"Error rendering page: {e}")
         return "An error occurred while rendering the page.", 500
 
-# READ: Customers Page
+
+# READ customers
 @app.route("/customers", methods=["GET"])
 def customers():
     try:
@@ -31,85 +32,8 @@ def customers():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-# # CREATE: Add a customer
-# @app.route("/create-customer", methods=["POST"])
-# def create_customer():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
 
-#         query = """
-#             INSERT INTO Customers (firstName, lastName, email, marketingOptOut, customerType, visitCount)
-#             VALUES (%s, %s, %s, %s, %s, %s);
-#         """
-#         values = (
-#             data.get("firstName"),
-#             data.get("lastName"),
-#             data.get("email"),
-#             int(data.get("marketingOptOut", 0)),
-#             data.get("customerType"),
-#             int(data.get("visitCount", 1)),
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/customers")
-#     except Exception as e:
-#         print(f"Error inserting customer: {e}")
-#         return "An error occurred while creating the customer.", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # UPDATE: Modify a customer
-# @app.route("/update-customer", methods=["POST"])
-# def update_customer():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-
-#         query = """
-#             UPDATE Customers
-#             SET email = %s,
-#                 marketingOptOut = %s,
-#                 customerType = %s,
-#                 visitCount = %s
-#             WHERE customerID = %s;
-#         """
-#         values = (
-#             data.get("email"),
-#             int(data.get("marketingOptOut", 0)),
-#             data.get("customerType"),
-#             int(data.get("visitCount", 1)),
-#             int(data.get("customerID")),
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/customers")
-#     except Exception as e:
-#         print(f"Error updating customer: {e}")
-#         return "An error occurred while updating the customer.", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # DELETE: Remove a customer
-# @app.route("/delete-customer", methods=["POST"])
-# def delete_customer():
-#     try:
-#         dbConnection = db.connectDB()
-#         customer_id = request.form.get("customerID")
-#         query = "DELETE FROM Customers WHERE customerID = %s;"
-#         db.query(dbConnection, query, (customer_id,))
-#         dbConnection.commit()
-#         return redirect("/customers")
-#     except Exception as e:
-#         print(f"Error deleting customer: {e}")
-#         return "An error occurred while deleting the customer.", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# READ: Orders Page
+# READ orders
 @app.route("/orders", methods=["GET"])
 def orders():
     try:
@@ -129,96 +53,11 @@ def orders():
             dbConnection.close()
 
 
-# CREATE: Add an order
-# @app.route("/create-order", methods=["POST"])
-# def create_order():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-#         query = "INSERT INTO Orders (customerID, timestamp, totalAmount) VALUES (%s, %s, %s);"
-#         values = (
-#             data.get("customerID"),
-#             data.get("timestamp"),  # Expected format: YYYY-MM-DD HH:MM:SS
-#             data.get("totalAmount")
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/orders")
-#     except Exception as e:
-#         print(f"Error creating order: {e}")
-#         return "Failed to create order", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # UPDATE: Modify an order
-# @app.route("/update-order", methods=["POST"])
-# def update_order():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-#         query = """
-#             UPDATE Orders
-#             SET customerID = %s,
-#                 timestamp = %s,
-#                 totalAmount = %s
-#             WHERE orderID = %s;
-#         """
-#         values = (
-#             data.get("customerID"),
-#             data.get("timestamp"),
-#             data.get("totalAmount"),
-#             data.get("orderID")
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/orders")
-#     except Exception as e:
-#         print(f"Error updating order: {e}")
-#         return "Failed to update order", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# # DELETE: Remove an order
-# @app.route("/delete-order", methods=["POST"])
-# def delete_order():
-#     try:
-#         dbConnection = db.connectDB()
-#         order_id = request.form.get("orderID")
-#         query = "DELETE FROM Orders WHERE orderID = %s;"
-#         db.query(dbConnection, query, (order_id,))
-#         dbConnection.commit()
-#         return redirect("/orders")
-#     except Exception as e:
-#         print(f"Error deleting order: {e}")
-#         return "Failed to delete order", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-# READ and UPDATE: Order Details Page
+# READ order details
 @app.route('/order-details', methods=["GET", "POST"])
 def order_details():
-    dbConnection = db.connectDB()
-
-    if request.method == "POST":
-        try:
-            order_id = request.form["orderID"]
-            menu_item_id = request.form["menuItemID"]
-            quantityMenuItem = request.form["quantityMenuItem"]
-
-            update_query = """
-                UPDATE OrderDetails
-                SET quantityMenuItem = %s
-                WHERE orderID = %s AND menuItemID = %s;
-            """
-            db.query(dbConnection, update_query, (quantityMenuItem, order_id, menu_item_id))
-        except Exception as e:
-            print("Error updating order detail:", e)
-
     try:
-        # Main view query
+        dbConnection = db.connectDB()
         select_query = """
             SELECT OrderDetails.orderID, OrderDetails.menuItemID, MenuItems.itemName, 
                    OrderDetails.quantityMenuItem, Orders.customerID, 
@@ -230,10 +69,6 @@ def order_details():
         """
         cursor = db.query(dbConnection, select_query)
         results = cursor.fetchall()
-
-        # Dropdown data
-        orders = db.query(dbConnection, "SELECT orderID FROM Orders;").fetchall()
-        menu_items = db.query(dbConnection, "SELECT menuItemID, itemName FROM MenuItems;").fetchall()
 
     except Exception as e:
         print("Error fetching order details:", e)
@@ -250,57 +85,7 @@ def order_details():
     )
 
 
-# # CREATE: Add new Order Detail
-# @app.route("/create-order-detail", methods=["POST"])
-# def create_order_detail():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-
-#         query = """
-#             INSERT INTO OrderDetails (orderID, menuItemID, quantity)
-#             VALUES (%s, %s, %s);
-#         """
-#         values = (
-#             data.get("orderID"),
-#             data.get("menuItemID"),
-#             data.get("quantity")
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/order-details")
-#     except Exception as e:
-#         print(f"Error creating order detail: {e}")
-#         return "Failed to create order detail", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-
-# # DELETE: Remove Order Detail
-# @app.route("/delete-order-detail", methods=["POST"])
-# def delete_order_detail():
-#     try:
-#         dbConnection = db.connectDB()
-#         order_id = request.form.get("orderID")
-#         menu_item_id = request.form.get("menuItemID")
-
-#         query = """
-#             DELETE FROM OrderDetails
-#             WHERE orderID = %s AND menuItemID = %s;
-#         """
-#         db.query(dbConnection, query, (order_id, menu_item_id))
-#         dbConnection.commit()
-#         return redirect("/order-details")
-#     except Exception as e:
-#         print(f"Error deleting order detail: {e}")
-#         return "Failed to delete order detail", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
-
-
-# READ: Menu Items Page
+# READ menu items
 @app.route("/menu-items", methods=["GET"])
 def menu_items():
     try:
@@ -315,60 +100,62 @@ def menu_items():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-# # CREATE: Add a menu item
-# @app.route("/create-menu-item", methods=["POST"])
-# def create_menu_item():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-#         query = """
-#             INSERT INTO MenuItems (itemName, description, price, costOfFood)
-#             VALUES (%s, %s, %s, %s);
-#         """
-#         values = (
-#             data.get("itemName"),
-#             data.get("description"),
-#             data.get("price"),
-#             data.get("costOfFood")  # now a string like '20%' or '50%'
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/menu-items")
-#     except Exception as e:
-#         print(f"Error creating menu item: {e}")
-#         return "Failed to create menu item", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
 
-# # # UPDATE: Modify a menu item
-# @app.route("/update-menu-item", methods=["POST"])
-# def update_menu_item():
-#     try:
-#         dbConnection = db.connectDB()
-#         data = request.form
-#         query = """
-#             UPDATE MenuItems
-#             SET description = %s,
-#                 price = %s,
-#                 costOfFood = %s
-#             WHERE menuItemID = %s;
-#         """
-#         values = (
-#             data.get("description"),
-#             data.get("price"),
-#             data.get("costOfFood"),  # string ENUM value
-#             data.get("menuItemID")
-#         )
-#         db.query(dbConnection, query, values)
-#         dbConnection.commit()
-#         return redirect("/menu-items")
-#     except Exception as e:
-#         print(f"Error updating menu item: {e}")
-#         return "Failed to update menu item", 500
-#     finally:
-#         if "dbConnection" in locals() and dbConnection:
-#             dbConnection.close()
+# CREATE menu item
+@app.route("/create-menu-item", methods=["POST"])
+def create_menu_item():
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        item_name = request.form["itemName"]
+        item_price = request.form["itemPrice"]
+        item_description = request.form["itemDescription"]
+        item_costOfFood = request.form["itemcostOfFood"]
+
+        query = "CALL sp_CreateMenuItem(%s, %s, %s, %s);"
+        cursor.execute(query, (item_name, item_description, item_price, item_costOfFood))
+
+        new_id = cursor.fetchone()[0]
+
+        dbConnection.commit()
+        print(f"Created menu item '{item_name}' with ID {new_id}")
+        return redirect("/menu-items")
+    
+    except Exception as e:
+        print(f"Error creating menu item: {e}")
+        return "Failed to create menu item", 500
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
+
+
+# UPDATE menu item
+@app.route("/update-menu-item", methods=["POST"])
+def update_menu_item():
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        item_id = request.form["menuItemID"]
+        item_name = request.form["itemName"]
+        item_description = request.form["itemDescription"]
+        item_price = request.form["itemPrice"]
+        item_costOfFood = request.form["itemcostOfFood"]
+
+        query = "CALL sp_UpdateMenuItem(%s, %s, %s, %s, %s);"
+        cursor.execute(query, (item_id, item_name, item_description, item_price, item_costOfFood))
+
+        dbConnection.commit()
+        print(f"Updated menu item ID {item_id}: {item_name}")
+        return redirect("/menu-items")
+    except Exception as e:
+        print(f"Error updating menu item: {e}")
+        return "Failed to update menu item", 500
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
+
 
 # DELETE menu item
 @app.route("/delete-menu-item", methods=["POST"])
@@ -397,7 +184,8 @@ def delete_menu_item():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-# READ: Sales Page
+
+# READ Sales Page
 @app.route("/sales", methods=["GET"])
 def sales():
     try:

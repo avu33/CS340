@@ -3,39 +3,7 @@
 
 <h1>Sales</h1>
 
-<h2>Create a Sale</h2>
-<form method="POST" action="/create-sale">
-  <label>Menu Item:</label>
-  <select name="menuItemID" required>
-    {% for item in menu_items %}
-    <option value="{{ item.menuItemID }}">{{ item.itemName }}</option>
-    {% endfor %}
-  </select>
 
-  <label>Quantity Sold:</label>
-  <input type="number" name="quantitySold" min="1" required>
-
-  <input type="submit" value="Create Sale">
-</form>
-
-<hr>
-
-<h2>Update a Sale</h2>
-<form method="POST" action="/update-sale">
-  <label>Sale to Update:</label>
-  <select name="saleID" required>
-    {% for sale in sales %}
-    <option value="{{ sale.saleID }}">Sale #{{ sale.saleID }}</option>
-    {% endfor %}
-  </select>
-
-  <label>Quantity Sold:</label>
-  <input type="number" name="quantitySold" min="1">
-
-  <input type="submit" value="Update Sale">
-</form>
-
-<hr> 
 
 <h2>Sales List</h2>
 <table border="1" cellpadding="5" cellspacing="0">
@@ -47,7 +15,6 @@
       <th>Total Cost</th>
       <th>Total Profit</th>
       <th>Quantity Sold</th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -59,10 +26,6 @@
       <td>{{ sale.totalCost }}</td>
       <td>{{ sale.totalProfit }}</td>
       <td>{{ sale.quantitySold }}</td>
-      <form method="POST" action="/delete-sale">
-        <input type="hidden" name="saleID" value="{{ sale.saleID }}">
-        <td><button type="submit">Delete</button></td>
-      </form>
     </tr>
     {% endfor %}
   </tbody>

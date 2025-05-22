@@ -12,8 +12,10 @@
     <a href="/orders">Orders</a> |
     <a href="/menu-items">Menu Items</a> |
     <a href="/sales">Sales</a> |
-    <a href="/order-details">Order Details</a>
-    <a href="/reset-db">Reset DB</a>
+    <a href="/order-details">Order Details</a> |
+    <form method="post" action="/reset-db">
+        <button type="submit" onclick="return confirm('This will reset tables to default values. Continue?');">Reset All Data</button>
+    </form>
 </nav>
 
 <hr>

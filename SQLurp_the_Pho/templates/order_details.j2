@@ -3,32 +3,6 @@
 
     <h1>Order Details</h1>
 
-    <h2>Add New Order Detail</h2>
-    <form method="POST" action="/create-order-detail">
-        <label for="orderID">Order:</label>
-        <select name="orderID" required>
-            <option value="" disabled selected>Choose an order</option>
-            {% for order in orders %}
-                <option value="{{ order.orderID }}">{{ order.orderID }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="menuItemID">Menu Item:</label>
-        <select name="menuItemID" required>
-            <option value="" disabled selected>Choose a menu item</option>
-            {% for item in menu_items %}
-                <option value="{{ item.menuItemID }}">{{ item.itemName }} (ID {{ item.menuItemID }})</option>
-            {% endfor %}
-        </select>
-
-        <label for="quantityMenuItem">Quantity:</label>
-        <input type="number" name="quantityMenuItem" min="1" required>
-
-        <button type="submit">Add</button>
-    </form>
-
-    <hr> 
-
     <h2>Order Details List</h2>
 
     {% if order_details %}
@@ -40,29 +14,15 @@
                 <th>Quantity</th>
                 <th>Customer ID</th>
                 <th>Customer Name</th>
-                <th></th>
-                <th></th>
             </tr>
             {% for row in order_details %}
             <tr>
-                <!-- Update quantity form -->
-                <form method="POST" action="/order-details">
-                    <td><input type="text" name="orderID" value="{{ row.orderID }}" readonly></td>
-                    <td><input type="text" name="menuItemID" value="{{ row.menuItemID }}" readonly></td>
-                    <td>{{ row.itemName }}</td>
-                    <td><input type="number" name="quantityMenuItem" value="{{ row.quantityMenuItem }}" min="1" required></td>
-                    <td>{{ row.customerID }}</td>
-                    <td>{{ row.firstName }} {{ row.lastName }}</td>
-                    <td><button type="submit">Update</button></td>
-                </form>
-
-                <!-- Delete form -->
-                <form method="POST" action="/delete-order-detail">
-                    <input type="hidden" name="orderID" value="{{ row.orderID }}">
-                    <input type="hidden" name="menuItemID" value="{{ row.menuItemID }}">
-                    <td><button type="submit" onclick="return confirm('Delete this item?');">Delete</button></td>
-                </form>
-            </tr>
+                <td>{{ row.orderID }}</td>
+                <td>{{ row.menuItemID }}</td>
+                <td>{{ row.itemName }}</td>
+                <td>{{ row.quantityMenuItem }}</td>
+                <td>{{ row.customerID }}</td>
+                <td>{{ row.firstName }} {{ row.lastName }}</td>
             {% endfor %}
         </table>
     {% else %}
