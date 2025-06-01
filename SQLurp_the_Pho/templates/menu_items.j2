@@ -9,13 +9,13 @@
   <input type="text" name="itemName" required>
 
   <label>Description:</label>
-  <input type="text" name="description">
+  <input type="text" name="itemdescription">
 
   <label>Price:</label>
-  <input type="number" name="price" step="0.01" min="0" required>
+  <input type="number" name="itemprice" step="0.01" min="0" required>
 
   <label>Cost of Food (%):</label>
-  <select name="costOfFood" required>
+  <select name="itemcostOfFood" required>
   <option value="20%">20%</option>
   <option value="50%">50%</option>
   </select>
@@ -35,12 +35,14 @@
             </option>
         {% endfor %}
     </select>
-
+    
+    <!--
     <label for="itemName">New Name:</label>
     <input type="text" name="itemName" required>
 
     <label for="itemDescription">New Description:</label>
     <input type="text" name="itemDescription">
+    -->
 
     <label for="itemPrice">New Price:</label>
     <input type="number" name="itemPrice" step="0.01" required>

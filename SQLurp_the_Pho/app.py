@@ -214,7 +214,7 @@ def reset_db():
         dbConnection.commit()
         print("Database reset successfully.")
 
-        return redirect("/")
+        return redirect(request.referrer or "/")
     
     except Exception as e:
         print(f"Error resetting database: {e}")
