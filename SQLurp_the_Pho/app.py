@@ -1,10 +1,10 @@
 # ########################################
 # ########## SETUP
-PORT = 1027
+PORT = 10233
 from flask import Flask, render_template, request, redirect
 import database.db_connector as db  
 
-PORT = 1027
+PORT = 10233
 app = Flask(__name__)
 
 # home page
@@ -227,4 +227,4 @@ def reset_db():
 if __name__ == "__main__":
     import os
     os.environ['FLASK_ENV'] = 'development'
-    app.run(host="0.0.0.0", port=1027, debug=True)
+    app.run(host="0.0.0.0", port=10233, debug=True)
