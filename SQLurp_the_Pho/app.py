@@ -1,10 +1,10 @@
 # ########################################
 # ########## SETUP
-PORT = 1027
+PORT = 10233
 from flask import Flask, render_template, request, redirect
 import database.db_connector as db  
 
-PORT = 1027
+PORT = 10233
 app = Flask(__name__)
 
 # home page
@@ -114,9 +114,10 @@ def create_menu_item():
         item_description = request.form["itemDescription"]
         item_costOfFood = request.form["itemcostOfFood"]
 
-        query = "CALL sp_CreateMenuItem(%s, %s, %s, %s);"
-        cursor.execute(query, (item_name, item_description, item_price, item_costOfFood))
-
+        cursor.execute("SET @new_id = 0;")
+        cursor.execute("CALL sp_CreateMenuItem(%s, %s, %s, %s, @new_id);", 
+                    (item_name, item_description, item_price, item_costOfFood))
+        cursor.execute("SELECT @new_id;")
         new_id = cursor.fetchone()[0]
 
         dbConnection.commit()
@@ -139,16 +140,14 @@ def update_menu_item():
         cursor = dbConnection.cursor()
 
         item_id = request.form["menuItemID"]
-        item_name = request.form["itemName"]
-        item_description = request.form["itemDescription"]
         item_price = request.form["itemPrice"]
         item_costOfFood = request.form["itemcostOfFood"]
 
-        query = "CALL sp_UpdateMenuItem(%s, %s, %s, %s, %s);"
-        cursor.execute(query, (item_id, item_name, item_description, item_price, item_costOfFood))
+        query = "CALL sp_UpdateMenuItem(%s, %s, %s);"
+        cursor.execute(query, (item_id, item_price, item_costOfFood))
 
         dbConnection.commit()
-        print(f"Updated menu item ID {item_id}: {item_name}")
+        print(f"Updated menu item ID {item_id}")
         return redirect("/menu-items")
     except Exception as e:
         print(f"Error updating menu item: {e}")
@@ -214,7 +213,7 @@ def reset_db():
         dbConnection.commit()
         print("Database reset successfully.")
 
-        return redirect(request.referrer or "/")
+        return redirect(request.referrer)
     
     except Exception as e:
         print(f"Error resetting database: {e}")
@@ -228,4 +227,4 @@ def reset_db():
 if __name__ == "__main__":
     import os
     os.environ['FLASK_ENV'] = 'development'
-    app.run(host="0.0.0.0", port=1027, debug=True)
+    app.run(host="0.0.0.0", port=10233, debug=True)
