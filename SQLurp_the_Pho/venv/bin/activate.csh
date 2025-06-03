@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV /nfs/stak/users/vua3/public_html/CS340/SQLurp_the_Pho/venv
+setenv VIRTUAL_ENV /nfs/stak/users/mijaresl/cs340/CS340/SQLurp_the_Pho/venv
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/"bin":$PATH"

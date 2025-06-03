@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV=/nfs/stak/users/vua3/public_html/CS340/SQLurp_the_Pho/venv
+VIRTUAL_ENV=/nfs/stak/users/mijaresl/cs340/CS340/SQLurp_the_Pho/venv
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
