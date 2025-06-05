@@ -202,6 +202,84 @@ def sales():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
+
+# ADD/CREATE order detail
+@app.route("/add-order-detail", methods=["POST"])
+def add_order_detail():
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        order_id = request.form["orderID"]
+        menu_item_id = request.form["menuItemID"]
+        quantity = request.form["quantityMenuItem"]
+
+        query = "CALL sp_CreateOrderDetail(%s, %s, %s);"
+        cursor.execute(query, (order_id, menu_item_id, quantity))
+
+        dbConnection.commit()
+        print(f"Added Order Detail: OrderID={order_id}, MenuItemID={menu_item_id}, Quantity={quantity}")
+        return redirect("/order-details")
+
+    except Exception as e:
+        print(f"Error adding order detail: {e}")
+        return "Failed to add order detail", 500
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
+
+
+# UPDATE order detail
+@app.route("/update-order-detail", methods=["POST"])
+def update_order_detail():
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        order_id = request.form["orderID"]
+        menu_item_id = request.form["menuItemID"]
+        new_quantity = request.form["quantityMenuItem"]
+
+        query = "CALL sp_UpdateOrderDetail(%s, %s, %s);"
+        cursor.execute(query, (order_id, menu_item_id, new_quantity))
+
+        dbConnection.commit()
+        print(f"Updated Order Detail: OrderID={order_id}, MenuItemID={menu_item_id}, New Quantity={new_quantity}")
+        return redirect("/order-details")
+
+    except Exception as e:
+        print(f"Error updating order detail: {e}")
+        return "Failed to update order detail", 500
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
+
+
+# DELETE order detail
+@app.route("/delete-order-detail", methods=["POST"])
+def delete_order_detail():
+    try:
+        dbConnection = db.connectDB()
+        cursor = dbConnection.cursor()
+
+        order_id = request.form["orderID"]
+        menu_item_id = request.form["menuItemID"]
+
+        query = "CALL sp_DeleteOrderDetail(%s, %s);"
+        cursor.execute(query, (order_id, menu_item_id))
+
+        dbConnection.commit()
+        print(f"Deleted Order Detail: OrderID={order_id}, MenuItemID={menu_item_id}")
+        return redirect("/order-details")
+
+    except Exception as e:
+        print(f"Error deleting order detail: {e}")
+        return "Failed to delete order detail", 500
+    finally:
+        if "dbConnection" in locals() and dbConnection:
+            dbConnection.close()
+
+
 # RESET db
 @app.route("/reset-db", methods=["POST"])
 def reset_db():
