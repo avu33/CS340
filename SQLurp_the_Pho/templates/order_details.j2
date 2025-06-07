@@ -23,7 +23,10 @@
   <label for="orderID">Order ID:</label>
   <select id="orderID" name="orderID" required>
     {% for order in orders %}
-      <option value="{{ order.orderID }}">{{ order.orderID }}</option>
+      <option value="{{ order.orderID }}">{{ order.orderID }} (ID: {{order.orderID}}) </option>
+
+            </option>
+
     {% endfor %}
   </select>
 
