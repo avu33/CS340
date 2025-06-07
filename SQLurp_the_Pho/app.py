@@ -230,7 +230,7 @@ def add_order_detail():
 
 
 # UPDATE order detail
-@app.route('/order-details', methods=["GET"])
+@app.route('/update-order-details', methods=["GET"])
 def order_details():
     results, orders, menu_items = [], [], []
 
