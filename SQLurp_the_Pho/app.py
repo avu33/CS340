@@ -253,6 +253,9 @@ def update_order_detail():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
+
+
+
 # DELETE order detail
 @app.route("/delete-order-detail", methods=["POST"])
 def delete_order_detail():
