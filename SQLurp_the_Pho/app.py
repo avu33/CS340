@@ -230,29 +230,42 @@ def add_order_detail():
 
 
 # UPDATE order detail
-@app.route("/update-order-detail", methods=["POST"])
-def update_order_detail():
+@app.route('/order-details', methods=["GET"])
+def order_details():
+    results, orders, menu_items = [], [], []
+
     try:
         dbConnection = db.connectDB()
-        cursor = dbConnection.cursor()
 
-        order_id = request.form["orderID"]
-        menu_item_id = request.form["menuItemID"]
-        new_quantity = request.form["quantityMenuItem"]
+        # Fetch order details for display
+        select_query = """
+            SELECT OrderDetails.orderID, OrderDetails.menuItemID, MenuItems.itemName, 
+                   OrderDetails.quantityMenuItem, Orders.customerID, 
+                   Customers.firstName, Customers.lastName
+            FROM OrderDetails
+            JOIN MenuItems ON OrderDetails.menuItemID = MenuItems.menuItemID
+            JOIN Orders ON OrderDetails.orderID = Orders.orderID
+            JOIN Customers ON Orders.customerID = Customers.customerID;
+        """
+        results = db.query(dbConnection, select_query).fetchall()
 
-        query = "CALL sp_UpdateOrderDetail(%s, %s, %s);"
-        cursor.execute(query, (order_id, menu_item_id, new_quantity))
-
-        dbConnection.commit()
-        print(f"Updated Order Detail: OrderID={order_id}, MenuItemID={menu_item_id}, New Quantity={new_quantity}")
-        return redirect("/order-details")
+        orders_query = "SELECT orderID FROM Orders;"
+        menu_items_query = "SELECT menuItemID, itemName FROM MenuItems;"
+        orders = db.query(dbConnection, orders_query).fetchall()
+        menu_items = db.query(dbConnection, menu_items_query).fetchall()
 
     except Exception as e:
-        print(f"Error updating order detail: {e}")
-        return "Failed to update order detail", 500
+        print("Error fetching order details:", e)
     finally:
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
+
+    return render_template(
+        "order_details.j2",
+        order_details=results,
+        orders=orders,
+        menu_items=menu_items
+    )
 
 
 # DELETE order detail
