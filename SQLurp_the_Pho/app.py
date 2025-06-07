@@ -231,7 +231,7 @@ def add_order_detail():
 
 # UPDATE order detail
 @app.route('/update-order-details', methods=["GET"])
-def order_details():
+def update_order_detail():
     results, orders, menu_items = [], [], []
 
     try:
