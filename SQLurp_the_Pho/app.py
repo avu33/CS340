@@ -240,7 +240,7 @@ def update_order_detail():
         item_quantity = request.form["quantityMenuItem"]
 
 
-        query = "CALL sp_UpdateMenuItem (%s, %s, %s);"
+        query = "CALL sp_UpdateOrderDetail (%s, %s, %s);"
         cursor.execute(query, (order_id, menu_item_id, item_quantity))
 
         dbConnection.commit()
