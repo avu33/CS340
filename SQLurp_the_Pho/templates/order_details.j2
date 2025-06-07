@@ -23,13 +23,11 @@
   <label for="orderID">Order ID:</label>
   <select id="orderID" name="orderID" required>
     {% for order in order_details %}
-      <option value="{{ order.orderID }}">{{ order.orderID }} (ID: {{order.orderID}}) </option>
+      <option value="{{ order.orderID }}">{{ order.orderID }} </option>
 
-      </option>
 
     {% endfor %}
   </select>
-
 
   <label for="menuItemID">Menu Item ID:</label>
   <select id="menuItemID" name="menuItemID" required>

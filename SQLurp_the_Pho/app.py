@@ -72,6 +72,16 @@ def order_details():
         cursor = db.query(dbConnection, select_query)
         results = cursor.fetchall()
 
+        # Fetch all orders (only order IDs needed)
+        orders_query = "SELECT orderID FROM Orders;"
+        cursor = db.query(dbConnection, orders_query)
+        orders = cursor.fetchall()
+
+        # Fetch all menu items (for menuItemID dropdown)
+        menu_items_query = "SELECT menuItemID, itemName FROM MenuItems;"
+        cursor = db.query(dbConnection, menu_items_query)
+        menu_items = cursor.fetchall()
+
     except Exception as e:
         print("Error fetching order details:", e)
     finally:
