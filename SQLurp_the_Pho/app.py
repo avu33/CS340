@@ -67,19 +67,20 @@ def order_details():
             FROM OrderDetails
             JOIN MenuItems ON OrderDetails.menuItemID = MenuItems.menuItemID
             JOIN Orders ON OrderDetails.orderID = Orders.orderID
-            JOIN Customers ON Orders.customerID = Customers.customerID;
+            JOIN Customers ON Orders.customerID = Customers.customerID
+            ORDER BY OrderDetails.orderID ASC, OrderDetails.menuItemID ASC;
         """
         cursor = db.query(dbConnection, select_query)
         results = cursor.fetchall()
 
-        # Fetch all orders (only order IDs needed)
-        orders_query = "SELECT orderID FROM Orders;"
-        cursor = db.query(dbConnection, orders_query)
+                # Get orders for dropdown
+        orders_query = "SELECT orderID FROM Orders ORDER BY orderID ASC;"
+        cursor.execute(orders_query)
         orders = cursor.fetchall()
 
-        # Fetch all menu items (for menuItemID dropdown)
+        # Get menu items for dropdown
         menu_items_query = "SELECT menuItemID, itemName FROM MenuItems;"
-        cursor = db.query(dbConnection, menu_items_query)
+        cursor.execute(menu_items_query)
         menu_items = cursor.fetchall()
 
     except Exception as e:
@@ -94,7 +95,6 @@ def order_details():
         orders=orders,
         menu_items=menu_items
     )
-
 
 # READ menu items
 @app.route("/menu-items", methods=["GET"])
