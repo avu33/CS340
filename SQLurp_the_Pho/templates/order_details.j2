@@ -1,5 +1,9 @@
-{% extends "main.j2" %}
-{% block content %}
+{#
+# Citation for the code below:
+# Date: 6/5/2025
+# All code for page based on the the starter code in "Building our webpage with Jinja Templating Engine"
+# Source URl: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+#}
 
 {#
 Citation for use of AI Tools:
@@ -8,6 +12,9 @@ Prompts used to generate style sheet for UI:
 Create form boxes with a modern, clean design that fits the Asian theme.
 AI Source URL: https://chatgpt.com/
 #}
+
+{% extends "main.j2" %}
+{% block content %}
 
 <h1>Order Details</h1>
 
@@ -19,15 +26,15 @@ AI Source URL: https://chatgpt.com/
   <label for="orderID">Order ID:</label>
   <select id="orderID" name="orderID" required>
     {% for order in orders %}
-      <option value="{{ order.orderID }}">{{ order.orderID }} </option>
+      <option value="{{ order.orderID }}">{{ order.orderID }}</option>
 
     {% endfor %}
   </select>
 
   <label for="menuItemID">Menu Item ID:</label>
-  <select id="menuItemID" name=" menuItemID " required>
+  <select id="menuItemID" name="menuItemID" required>
     {% for item in menu_items %}
-      <option value="{{ item.menuItemID }}">{{ item.menuItemID }} - {{ item.itemName }} </option>
+      <option value="{{ item.menuItemID }}">{{ item.menuItemID }} - {{ item.itemName }}</option>
     {% endfor %}
   </select>
   </div>
@@ -38,7 +45,7 @@ AI Source URL: https://chatgpt.com/
 
   <input type="submit" value="Add Order Detail">
   </div>
-  
+
 </form>
 </div>
 
@@ -47,9 +54,9 @@ AI Source URL: https://chatgpt.com/
   <form action="/update-order-detail" method="POST">
   <div class="form-row">
   <label for="orderID">Order ID:</label>
-  <select id="orderID" name=" orderID " required>
+  <select id="orderID" name="orderID" required>
     {% for order in orders %}
-      <option value="{{ order.orderID }}">{{ order.orderID }} </option>
+      <option value="{{ order.orderID }}">{{ order.orderID }}</option>
     {% endfor %}
   </select>
 

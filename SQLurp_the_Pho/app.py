@@ -256,10 +256,13 @@ def add_order_detail():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-    # UPDATE order detail
+# UPDATE order detail
 @app.route("/update-order-detail", methods=["POST"])
 def update_order_detail():
     try:
+        print("Form keys:", request.form.keys())
+        print("Form data:", request.form.to_dict())
+        
         dbConnection = db.connectDB()
         cursor = dbConnection.cursor()
 
