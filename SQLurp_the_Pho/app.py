@@ -1,5 +1,22 @@
 # ########################################
 # ########## SETUP
+
+# APP.PY
+# CS340 Project Group 21 - SQLurp the Pho
+# Lorine Kaye Mijares and Annabel Vu
+
+# Citation for the code below (all routes):
+# Date: 6/5/2025
+# All code for routes based on the the starter code in Module 8, Exploration "Implementing CUD operations in your app" 
+# Source URl: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+# Citation for use of AI Tools:
+# Date: 6/5/2025
+# Summary of prompts used on app.py
+# AI used to troubleshoot errors in routes for Order Details causing blank dropdown menus on the add and update forms,
+# duplication of IDs in the dropdown menus, and newly-added Order Details resetting the display table upon submitting the Add form
+# AI Source URL: https://chatgpt.com
+
 PORT = 10233
 from flask import Flask, render_template, request, redirect
 import database.db_connector as db  
@@ -54,6 +71,7 @@ def orders():
 
 
 # READ order details
+# AI used in the following code to identify errors causing blank dropdown menus per citation in header
 @app.route('/order-details', methods=["GET", "POST"])
 def order_details():
     results, orders, menu_items = [], [], []
@@ -73,7 +91,7 @@ def order_details():
         cursor = db.query(dbConnection, select_query)
         results = cursor.fetchall()
 
-                # Get orders for dropdown
+        # Get orders for dropdown
         orders_query = "SELECT orderID FROM Orders ORDER BY orderID ASC;"
         cursor.execute(orders_query)
         orders = cursor.fetchall()

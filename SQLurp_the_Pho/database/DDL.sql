@@ -1,3 +1,12 @@
+-- DDL
+-- CS340 Project Group 21 - SQLurp the Pho
+-- Lorine Kaye Mijares and Annabel Vu
+
+-- Citation for the code below (May 21 2025):
+-- Code based on the the starter code in Module 8, Exploration "Implementing CUD operations in your app" 
+-- Source URl: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-implementing-cud-operations-in-your-app?module_item_id=25352968
+
+
 -- ######################################
 -- RESET/LOAD database
 -- ######################################
@@ -12,6 +21,7 @@ BEGIN
     DROP TABLE IF EXISTS `Customers`;
     DROP TABLE IF EXISTS `Orders`; 
     DROP TABLE IF EXISTS `OrderDetails`;
+    
     DROP TABLE IF EXISTS `Sales`;
 
     -- -----------------------------------------------------
