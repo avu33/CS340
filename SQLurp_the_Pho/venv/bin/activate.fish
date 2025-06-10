@@ -29,7 +29,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /nfs/stak/users/mijaresl/cs340/CS340/SQLurp_the_Pho/venv
+set -gx VIRTUAL_ENV /nfs/stak/users/vua3/public_html/CS340/SQLurp_the_Pho/venv
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

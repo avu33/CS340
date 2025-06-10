@@ -3,29 +3,42 @@
 
 <h1>Menu Items</h1>
 
-<h2>Create a Menu Item</h2>
-<form method="POST" action="/create-menu-item">
-  <label>Item Name:</label>
-  <input type="text" name="itemName" required>
 
-  <label>Description:</label>
-  <input type="text" name="itemDescription">
+{#
+Citation for use of AI Tools:
+Date: 06/09/2025
+Prompts used to generate style sheet for UI:
+Create form boxes with a modern, clean design that fits the Asian theme.
+AI Source URL: https://chatgpt.com/
+#}
 
-  <label>Price:</label>
-  <input type="number" name="itemPrice" step="0.01" min="0" required>
+<div class="form-box">
+  <div class="form-title">Create a Menu Item</div>
+  <form method="POST" action="/create-menu-item">
+    <label>Item Name:</label>
+    <input type="text" name="itemName" required>
 
-  <label>Cost of Food (%):</label>
-  <select name="itemcostOfFood" required>
-  <option value="20%">20%</option>
-  <option value="50%">50%</option>
-  </select>
+    <label>Description:</label>
+    <input type="text" name="itemDescription">
 
-  <input type="submit" value="Create Menu Item">
-</form>
+    <div class="form-row">
+    <label>Price:</label>
+    <input type="number" name="itemPrice" step="0.01" min="0" required>
 
-<hr> 
+    <label>Cost of Food (%):</label>
+      <select name="itemcostOfFood" required>
+      <option value="20%">20%</option>
+      <option value="50%">50%</option>
+    </select>
+    </div>
 
-<h2>Update Menu Item</h2>
+    <input type="submit" value="Create Menu Item">
+
+  </form>
+</div>
+
+<div class="form-box">
+  <div class="form-title">Update Menu Item</div>
 <form method="POST" action="/update-menu-item">
     <label for="menuItemID">Select Item to Update:</label>
     <select name="menuItemID" required>
@@ -36,19 +49,22 @@
         {% endfor %}
     </select>
 
+    <div class="form-row">
     <label for="itemPrice">New Price:</label>
     <input type="number" name="itemPrice" step="0.01" min="0" required>
-
+    
     <label for="itemcostOfFood">Cost of Food:</label>
     <select name="itemcostOfFood" required>
         <option value="20%">20%</option>
         <option value="50%">50%</option>
     </select>
+    </div>
 
     <button type="submit">Update</button>
 </form>
+</div>
 
-<hr> 
+ 
 
 <h2>Menu Item List</h2>
 <table border="1" cellpadding="5" cellspacing="0">
@@ -59,7 +75,6 @@
       <th>Description</th>
       <th>Price</th>
       <th>Cost Of Food</th>
-      <th></th>
       <th></th>
     </tr>
   </thead>
@@ -83,6 +98,6 @@
   </tbody>
 </table>
 
-<hr>
+
 
 {% endblock %}
